@@ -29,7 +29,6 @@ public class BeanFactoryValidatorService {
     }
 
     public static Validator getInstance(String type) {
-        log.debug("Set instance by type : " + type);
         return beanFactory.getBean(getValidatorServiceBeanName(type),
                 Validator.class);
     }

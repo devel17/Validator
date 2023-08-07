@@ -5,8 +5,10 @@
 package com.dev.validator.controller;
 
 import com.dev.validator.factory.BeanFactoryValidatorService;
-import com.dev.validator.dto.ValidationDTO;
+import com.dev.validator.dto.ValidationRequestDTO;
+import com.dev.validator.dto.ValidationResponseDTO;
 import com.dev.validator.exception.ValidateException;
+import com.dev.validator.exception.ValidateNotFoundException;
 import com.dev.validator.model.AbstractIdentifier;
 import com.dev.validator.model.Code;
 import com.dev.validator.model.CountryCode;
@@ -16,7 +18,9 @@ import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,34 +38,27 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class ValidateController extends BaseController {
 
-    @GetMapping
+    @PostMapping
+//    @CrossOrigin(origins = "http://localhost:3000")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ValidationDTO byType(@RequestBody ValidationDTO validateDto) throws ValidateException {
+    public ValidationResponseDTO byType(@RequestBody ValidationRequestDTO validationRequestDTO) throws ValidateException {
+        log.debug("Request : " + validationRequestDTO.toString());
+        validateService = BeanFactoryValidatorService.getInstance(validationRequestDTO.getValidationType());
 
-        validateService = BeanFactoryValidatorService.getInstance(validateDto.getValidationType());
-
-        List<AbstractIdentifier> result = validateService.validate(validateDto.getValidationSource());
+        List<AbstractIdentifier> result = validateService.validate(validationRequestDTO.getValidationSource());
         
-        validateDto.setValidationResult(result
+        ValidationResponseDTO validationResponseDTO = new ValidationResponseDTO();
+        validationResponseDTO.setValidationResult(result
                 .stream()
                 .filter(CountryCode.class::isInstance)
                 .map(CountryCode.class::cast)
                 .map(CountryCode::getCountry)
                 .collect(Collectors.joining(",")));
-                
-//        validateDto.setValidationResult(result
-//                .stream()
-//                .filter(Code.class::isInstance)
-//                .map(Code.class::cast)
-//                .map(Code::getIsNumber)
-//                .findFirst()
-//                .get()
-//                .toString());
-                
-                
 
-        return validateDto;
+        
+        log.debug("Response : " + validationResponseDTO.toString());
+        return validationResponseDTO;
     }
 
 }

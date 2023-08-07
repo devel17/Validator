@@ -8,27 +8,28 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Data Transfer Object процесса валидации
- * 
+ * Data Transfer Object Ответ процесса валидации
+ *
  * @author devel
  */
 @Getter
 @Setter
-public class ValidationDTO {
-    
-    /**
-     * Тип соответсвия 
-     */
-    private String validationType;
-    
-    /**
-     * Источник, для которого необходимо установить соответсвие
-     */
-    private String validationSource;
-    
+public class ValidationResponseDTO {
+
+    public ValidationResponseDTO() {
+    }
+
+    public ValidationResponseDTO(String validationResult) {
+        this.validationResult = validationResult;
+    }
+
     /**
      * Результат операции
      */
     private String validationResult;
-    
+
+    @Override
+    public String toString() {
+        return "ValidationResponseDTO{" + "validationResult=" + validationResult + '}';
+    }
 }

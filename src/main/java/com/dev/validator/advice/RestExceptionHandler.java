@@ -5,7 +5,9 @@
 package com.dev.validator.advice;
 
 import com.dev.validator.dto.ResponseDTO;
+import com.dev.validator.dto.ValidationResponseDTO;
 import com.dev.validator.exception.ValidateException;
+import com.dev.validator.exception.ValidateNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,6 +27,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ResponseDTO> handleException(ValidateException e) {
         ResponseDTO responseDto = new ResponseDTO(e.getMessage());
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
+    
+    @ExceptionHandler(ValidateNotFoundException.class)
+    public ResponseEntity<ValidationResponseDTO> handleException(ValidateNotFoundException e) {
+        ValidationResponseDTO validationResponseDTO = new ValidationResponseDTO(e.getMessage());
+        return new ResponseEntity<>(validationResponseDTO, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)
