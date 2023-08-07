@@ -1,1 +1,1 @@
-curl -X GET -H 'Content-type:application/json; utf-8' -d '{"validationType":"Country", "validationSource":"375291112233", "validationResult":""}' http://localhost:8088/validate
+curl -X POST -H 'Content-type:application/json; utf-8' -d '{"validationType":"Country", "validationSource":"375291112233"}' http://localhost:8088/validate
