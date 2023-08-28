@@ -5,7 +5,7 @@
 package com.dev.validator.service;
 
 import com.dev.validator.exception.ValidateException;
-import com.dev.validator.model.AbstractIdentifier;
+import com.dev.validator.model.AbstractCode;
 import java.util.List;
 
 /**
@@ -13,7 +13,7 @@ import java.util.List;
  * 
  * @author devel
  */
-public interface Validator {
+public interface CodeValidator {
     
-    public <T extends AbstractIdentifier> List<T> validate(String src) throws ValidateException;
+    <T extends AbstractCode> List<T> validate(String src) throws ValidateException;
 }

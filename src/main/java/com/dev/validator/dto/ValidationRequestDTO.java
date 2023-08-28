@@ -4,32 +4,25 @@
  */
 package com.dev.validator.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.extern.jackson.Jacksonized;
 
 /**
  * Data Transfer Object запрос процесса валидации
- * 
+ *
  * @author devel
  */
-@Getter
-@Setter
+@Data
+@Jacksonized
+@Builder
+@AllArgsConstructor
 public class ValidationRequestDTO {
-    
-    /**
-     * Тип соответсвия 
-     */
-    private String validationType;
-    
+
     /**
      * Источник, для которого необходимо установить соответсвие
      */
     private String validationSource;
 
-    @Override
-    public String toString() {
-        return "ValidationRequestDTO{" + "validationType=" + validationType + ", validationSource=" + validationSource + '}';
-    }
-    
-    
 }

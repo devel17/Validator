@@ -4,61 +4,76 @@
  */
 package com.dev.validator.controller;
 
-import com.dev.validator.factory.BeanFactoryValidatorService;
 import com.dev.validator.dto.ValidationRequestDTO;
 import com.dev.validator.dto.ValidationResponseDTO;
 import com.dev.validator.exception.ValidateException;
-import com.dev.validator.exception.ValidateNotFoundException;
-import com.dev.validator.model.AbstractIdentifier;
-import com.dev.validator.model.Code;
+import com.dev.validator.model.AbstractCode;
 import com.dev.validator.model.CountryCode;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import com.dev.validator.service.CodeValidator;
 
 /**
  * Контроллер процесса установления соответсвия
- * 
+ *
  * @author devel
  */
+@Slf4j
 @RestController
 @RequestMapping("/validate")
-@Slf4j
-public class ValidateController extends BaseController {
+@RequiredArgsConstructor
+public class ValidateController {
+
+    private final CodeValidator validateService;
 
     @PostMapping
-//    @CrossOrigin(origins = "http://localhost:3000")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public ValidationResponseDTO byType(@RequestBody ValidationRequestDTO validationRequestDTO) throws ValidateException {
+    public ValidationResponseDTO post(@RequestBody ValidationRequestDTO validationRequestDTO) throws ValidateException {
         log.debug("Request : " + validationRequestDTO.toString());
-        validateService = BeanFactoryValidatorService.getInstance(validationRequestDTO.getValidationType());
+        List<AbstractCode> result = new ArrayList<>();
+        if (!validationRequestDTO.getValidationSource().isEmpty()) {
+            result = validateService.validate(validationRequestDTO.getValidationSource());
+        }
 
-        List<AbstractIdentifier> result = validateService.validate(validationRequestDTO.getValidationSource());
-        
         ValidationResponseDTO validationResponseDTO = new ValidationResponseDTO();
         validationResponseDTO.setValidationResult(result
                 .stream()
                 .filter(CountryCode.class::isInstance)
                 .map(CountryCode.class::cast)
                 .map(CountryCode::getCountry)
-                .collect(Collectors.joining(",")));
+                .collect(Collectors.joining(", ")));
 
-        
         log.debug("Response : " + validationResponseDTO.toString());
         return validationResponseDTO;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CountryCode>> get(@RequestParam(required = false) String phone) throws ValidateException {
+            
+        List<CountryCode> codes = new ArrayList<>();
+        
+//        return Optional.ofNullable(language)
+//        .map(programmerService::findProgrammersByLanguage)
+//        .orElse(programmerService.findAllProgrammers());
+        
+        if (phone != null) {
+            validateService.validate(phone)
+                    .stream()
+                    .filter(CountryCode.class::isInstance)
+                    .map(CountryCode.class::cast)
+                    .forEach(codes::add);
+        }
+        return new ResponseEntity<>(codes, HttpStatus.OK);
     }
 
 }

@@ -6,30 +6,28 @@ package com.dev.validator.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 /**
  * Сущность для инкапсуляции данных и их обработки спавочника кодов стран
  * 
  * @author devel
  */
-@Getter
-@Setter
 @Entity
-public class CountryCode extends Code {
+@Data
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+public class CountryCode extends AbstractCode {
 
-    public CountryCode() {
-    }
-
-    
     public CountryCode(String country, String code) {
-        this.code = code;
         this.country = country;
+        this.code = code;
     }
-    
+
+    @NonNull
     @Column
     private String country;
     

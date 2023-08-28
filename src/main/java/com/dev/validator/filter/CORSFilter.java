@@ -6,7 +6,6 @@ package com.dev.validator.filter;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.FilterConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
@@ -20,6 +19,7 @@ import org.springframework.stereotype.Component;
  */
 public class CORSFilter implements Filter {
 
+        @Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 		HttpServletResponse response = (HttpServletResponse) res;
 		response.setHeader("Access-Control-Allow-Origin", "*");
@@ -28,9 +28,4 @@ public class CORSFilter implements Filter {
 		response.setHeader("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Authorization, Origin, Accept, Access-Control-Allow-Headers, Access-Control-Allow-Origin, Access-Control-Allow-Methods");
 		chain.doFilter(req, res);
 	}
-
-	public void init(FilterConfig filterConfig) {}
-
-	public void destroy() {}
-
 }

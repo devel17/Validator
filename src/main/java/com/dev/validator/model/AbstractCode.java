@@ -6,24 +6,22 @@ package com.dev.validator.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Transient;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
 /**
- * Абстракиция произвольного кода (подразделения, доступа, числового ...)
- * 
+ * Абстракция произвольного кода 
+ *
  * @author devel
  */
 @Getter
 @Setter
 @MappedSuperclass
-public class Code extends AbstractIdentifier {
-    
+public abstract class AbstractCode extends Domain {
+
+    @NonNull
     @Column
     public String code;
-    
-    @Transient
-    public Boolean isNumber;
-    
+
 }

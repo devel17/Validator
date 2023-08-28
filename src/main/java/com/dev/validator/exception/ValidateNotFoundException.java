@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author devel
  */
-@ResponseStatus(value = HttpStatus.NOT_FOUND)
+@ResponseStatus(value = HttpStatus.NO_CONTENT)
 public class ValidateNotFoundException extends ValidateException {
 
     public static final String COUNTRY_NOT_FOUND = "Country not found!";

@@ -4,16 +4,15 @@
  */
 package com.dev.validator.service;
 
-import com.dev.validator.dao.spring.CountryCodeRepository;
-import com.dev.validator.dao.spring.SpringDAOManager;
+import com.dev.validator.repo.CountryCodeRepository;
 import com.dev.validator.exception.ValidateException;
 import com.dev.validator.exception.ValidateNotFoundException;
-import com.dev.validator.model.AbstractIdentifier;
+import com.dev.validator.model.AbstractCode;
 import com.dev.validator.model.CountryCode;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,22 +21,26 @@ import org.springframework.stereotype.Service;
  * @author devel
  */
 @Slf4j
-@Service("CountryValidateService")
-public class CountryCodeValidateService extends ValidateService {
+@Service
+@RequiredArgsConstructor
+public class CountryCodeValidateService implements CodeValidator {
 
-    @Autowired
-    CountryCodeRepository repo;
+    private final CountryCodeRepository repo;
 
     @Override
-    public <T extends AbstractIdentifier> List<T> validate(String src) throws ValidateException {
+    public <T extends AbstractCode> List<T> validate(String src) throws ValidateException {
         List<CountryCode> result = new ArrayList<>();
+
         src = src.replaceFirst("[+]", "");
+        if (!src.matches("[0-9]+") || src.length() > 15) {
+            throw new ValidateNotFoundException();
+        }
+
+        Integer maxLenCodeValue = repo.getMaxLenghtCode();
 
         try {
-            for (int i = 1; i < src.length(); i++) {
-                if (!src.matches("[0-9]+")) {
-                    break;
-                }
+            for (int i = 1; i < maxLenCodeValue; i++) {
+
                 String tmp = src.substring(0, i);
                 List<CountryCode> list = repo.findByCode(tmp);
                 if (!list.isEmpty()) {

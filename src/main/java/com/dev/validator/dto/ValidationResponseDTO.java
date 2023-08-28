@@ -4,32 +4,26 @@
  */
 package com.dev.validator.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.extern.jackson.Jacksonized;
 
 /**
  * Data Transfer Object Ответ процесса валидации
  *
  * @author devel
  */
-@Getter
-@Setter
+@Data
+@Jacksonized
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ValidationResponseDTO {
-
-    public ValidationResponseDTO() {
-    }
-
-    public ValidationResponseDTO(String validationResult) {
-        this.validationResult = validationResult;
-    }
 
     /**
      * Результат операции
      */
     private String validationResult;
-
-    @Override
-    public String toString() {
-        return "ValidationResponseDTO{" + "validationResult=" + validationResult + '}';
-    }
 }
