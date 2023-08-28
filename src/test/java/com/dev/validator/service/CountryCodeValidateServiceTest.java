@@ -4,67 +4,47 @@
  */
 package com.dev.validator.service;
 
-import com.dev.validator.dao.spring.CountryCodeRepository;
-import com.dev.validator.dao.spring.SpringDAOManager;
-import com.dev.validator.exception.ParseException;
+import com.dev.validator.repo.CountryCodeRepository;
 import com.dev.validator.exception.ValidateException;
 import com.dev.validator.exception.ValidateNotFoundException;
 import com.dev.validator.model.CountryCode;
-import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.jupiter.api.Assertions;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
-import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
 /**
  *
  * @author devel
  */
 @DataJpaTest
-//@TestInstance(Lifecycle.PER_CLASS)
-//@Transactional
-@AutoConfigureTestDatabase(replace = Replace.NONE)
+@ActiveProfiles("test")
+@TestPropertySource(properties = {
+    "spring.jpa.hibernate.ddl-auto=none",
+    "spring.sql.init.mode=always",
+    "spring.sql.init.platform=h2"
+})
 public class CountryCodeValidateServiceTest {
 
-//    @Mock
-    @Autowired
-    private CountryCodeRepository repo;
+    private final CountryCodeValidateService countryCodeValidateService;
 
-//    @InjectMocks
     @Autowired
-    private CountryCodeValidateService countryCodeValidateService;
+    public CountryCodeValidateServiceTest(final CountryCodeRepository repo) {
+        this.countryCodeValidateService = new CountryCodeValidateService(repo);
+    }
 
-//    @InjectMocks 
-//    private ParseService parseService;
-//    @Autowired
-//    TestEntityManager testEntityManager;
-//    @BeforeAll
-//    public void initData() throws ParseException {
-//        parseService.parse().stream()
-//                .filter(CountryCode.class::isInstance)
-//                .map(CountryCode.class::cast)
-//                .forEach(cc -> testEntityManager.persist(cc));
-//    }
+    @Test
+    @DisplayName("Test initialization components")
+    public void usedComponentsAreNotNull() {
+        assertThat(countryCodeValidateService).isNotNull();
+    }
+
     @Test
     @DisplayName("testBahamas")
     public void testBahamas() throws ValidateException {
@@ -84,8 +64,6 @@ public class CountryCodeValidateServiceTest {
     public void testRussia() throws ValidateException {
         List<CountryCode> codes = countryCodeValidateService.validate("71423423412");
         assertThat(codes).extracting(CountryCode::getCountry).contains("Russia");
-//        assertEquals(codes.stream().map(CountryCode::getCountry).collect(Collectors.joining(",")), "Russia");
-
     }
 
     @Test
@@ -103,12 +81,10 @@ public class CountryCodeValidateServiceTest {
                 () -> countryCodeValidateService.validate("000000000000"),
                 ValidateNotFoundException.COUNTRY_NOT_FOUND
         );
-//        Assertions.assertEquals(ValidateNotFoundException.COUNTRY_NOT_FOUND, thrown.getMessage());
         assertTrue(thrown.getMessage().contains(ValidateNotFoundException.COUNTRY_NOT_FOUND));
 
     }
-    
-    
+
     @Test
     @DisplayName("testLiteralCode")
     public void testLiteralCode() throws ValidateException {
@@ -117,18 +93,27 @@ public class CountryCodeValidateServiceTest {
                 () -> countryCodeValidateService.validate("ssadsadsa"),
                 ValidateNotFoundException.COUNTRY_NOT_FOUND
         );
-//        Assertions.assertEquals(ValidateNotFoundException.COUNTRY_NOT_FOUND, thrown.getMessage());
         assertTrue(thrown.getMessage().contains(ValidateNotFoundException.COUNTRY_NOT_FOUND));
 
     }
     
     @Test
+    @DisplayName("testOverSizeCode")
+    public void testOverSizeCode() throws ValidateException {
+        ValidateNotFoundException thrown = assertThrows(
+                ValidateNotFoundException.class,
+                () -> countryCodeValidateService.validate("+12345678987654321"),
+                ValidateNotFoundException.COUNTRY_NOT_FOUND
+        );
+        assertTrue(thrown.getMessage().contains(ValidateNotFoundException.COUNTRY_NOT_FOUND));
+
+    }
+
+    @Test
     @DisplayName("testPlus")
     public void testPlus() throws ValidateException {
         List<CountryCode> codes = countryCodeValidateService.validate("+71423423412");
         assertThat(codes).extracting(CountryCode::getCountry).contains("Russia");
-//        assertEquals(codes.stream().map(CountryCode::getCountry).collect(Collectors.joining(",")), "Russia");
-
     }
 
 }

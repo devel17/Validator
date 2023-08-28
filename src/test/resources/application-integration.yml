@@ -1,12 +1,15 @@
 ## YAML Template.
 ---
-spring:      
+spring: 
+  test: 
+    database:
+      replace: none
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: validator
-    password: validator
-    url: jdbc:mysql://localhost:3306/validator
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:tc:mysql:5.7.34:///db?TC_INITSCRIPT=file:src/test/resources/schema-mysql.sql
   jpa:
-    show-sql : false
+    show-sql: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
+      
+     
