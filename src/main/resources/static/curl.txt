@@ -1,1 +1,13 @@
-curl -X POST -H 'Content-type:application/json; utf-8' -d '{"validationType":"Country", "validationSource":"375291112233"}' http://localhost:8088/validate
+curl -X POST -H 'Content-type:application/json; utf-8' -d '{"validationSource":"12423222931"}' http://localhost:8088/validate
+
+curl -X POST -H 'Content-type:application/json; utf-8' -d '{"validationSource":"11165384765"}' http://localhost:8088/validate
+
+curl -X POST -H 'Content-type:application/json; utf-8' -d '{"validationSource":"71423423412"}' http://localhost:8088/validate
+
+curl -X POST -H 'Content-type:application/json; utf-8' -d '{"validationSource":"77112227231"}' http://localhost:8088/validate
+
+curl -X POST -H 'Content-type:application/json; utf-8' -d '{"validationSource":"000000000000"}' http://localhost:8088/validate
+
+curl -X POST -H 'Content-type:application/json; utf-8' -d '{"validationSource":"ssadsadsaasa"}' http://localhost:8088/validate
+
+curl -X POST -H 'Content-type:application/json; utf-8' -d '{"validationSource":"+71423423412"}' http://localhost:8088/validate
