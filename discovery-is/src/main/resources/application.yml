@@ -1,0 +1,20 @@
+## YAML Template.
+---
+spring:
+    application:
+        name: discovery
+
+server:
+    port: 8761
+    
+eureka:
+    instance:
+        hostname: discovery
+        prefer-ip-address: false
+    client:
+        registerWithEureka: false
+        fetchRegistry: false
+        serviceUrl:
+            defaultZone: http://discovery:8761/eureka/
+        server:
+            waitTimeInMsWhenSyncEmpty: 0

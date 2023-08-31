@@ -2,9 +2,7 @@ version: "3"
 services:
 
   backend: 
-    build:
-      context: ./backend/
-      dockerfile: Dockerfile
+    build: backend-ms
     env_file: ./.env
     environment:
       SPRING_APPLICATION_JSON: '{
@@ -16,10 +14,34 @@ services:
     ports: 
       - $SPRING_LOCAL_BECKEND_PORT:$SPRING_DOCKER_BECKEND_PORT
     volumes:
-      - "${HOME}/.m2:/root/.m2"
+      - "$HOME/.m2:/root/.m2"
     depends_on:
+      - discovery
       - mysqldb
-
+    
+  
+  frontend: 
+    build: frontend-ms
+    env_file: ./.env
+    ports: 
+      - $SPRING_LOCAL_FRONTEND_PORT-9091:$SPRING_DOCKER_FRONTEND_PORT
+    volumes:
+      - "$HOME/.m2:/root/.m2"
+    depends_on: 
+      - discovery
+      - backend
+#    deploy:
+#        mode: replicated
+#        replicas: 2
+      
+  discovery:
+    build: discovery-is
+    env_file: ./.env
+    ports: 
+      - $SPRING_LOCAL_DISCOVERY_PORT:$SPRING_DOCKER_DISCOVERY_PORT
+    volumes:
+      - "$HOME/.m2:/root/.m2"
+    
   mysqldb:
     image: mysql:5.7.34
     restart: unless-stopped
@@ -32,17 +54,5 @@ services:
     volumes:
       - db:/var/lib/mysql
 
-  frontend: 
-    build:
-      context: ./frontend/
-      dockerfile: Dockerfile
-    env_file: ./.env
-    ports: 
-      - $SPRING_LOCAL_FRONTEND_PORT:$SPRING_DOCKER_FRONTEND_PORT
-    volumes:
-      - "${HOME}/.m2:/root/.m2"
-    depends_on: 
-      - backend
-      
 volumes:
   db:
