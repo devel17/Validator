@@ -1,0 +1,23 @@
+#TODO Change for git use (profiles.active=default)
+spring:
+  application:
+      name: config
+  cloud:
+      config:
+          server:
+#           git:
+#             uri: @project.basedir@/git_config_repo
+#             default-label: master
+            native:
+                search-locations: classpath:/confs
+  profiles:
+     active: native
+
+server:
+  port: 8888
+  
+eureka:
+    client:
+        service-url:
+            defaultZone: http://${DISCOVERY_SERVER_HOST:localhost}:8761/eureka/
+

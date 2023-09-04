@@ -1,7 +1,7 @@
 ## YAML Template.
 ---
 validator:
-  url: http://localhost:8888/wiki
+  url: http://localhost:9999/wiki
 
 server:
   port:
@@ -10,7 +10,6 @@ server:
 eureka:
   client:
     enabled: false
-    
 spring:      
   datasource:
     driver-class-name: org.h2.Driver
@@ -27,5 +26,8 @@ spring:
   h2:
     console:
       enabled: true
+#  cloud:
+#      config:
+#          enabled: false
       
      

@@ -33,7 +33,7 @@ import org.springframework.test.context.ActiveProfiles;
 @Slf4j
 @SpringBootTest
 @ActiveProfiles("test")
-@AutoConfigureWireMock(port = 8888)
+@AutoConfigureWireMock(port = 9999)
 public class CountryCodeParseServiceTest {
 
     public static final String WIKIPEDIA_STUB_FILE = "stub.html";

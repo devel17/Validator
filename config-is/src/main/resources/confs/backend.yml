@@ -3,6 +3,7 @@
 logging:
   level:
     org.springframework: ERROR
+    com.zaxxer.hikari: TRACE
     com.dev.validator: DEBUG
     org.hibernate.SQL: OFF
   pattern:
@@ -34,9 +35,9 @@ spring:
       additional-paths: /src/main        
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: validator
-    password: validator
-    url: jdbc:mysql://localhost:3306/validator
+    username: ${MYSQLDB_ROOT_USER:validator}
+    password: ${MYSQLDB_ROOT_PASSWORD:validator}
+    url: jdbc:mysql://${MYSQLDB_SERVER_HOST:localhost}:3306/validator
   jpa:
     properties:
         hibernate:
@@ -46,7 +47,3 @@ spring:
     hibernate:
       ddl-auto: update
   
-eureka:
-    client:
-        service-url:
-            defaultZone: http://discovery:8761/eureka/

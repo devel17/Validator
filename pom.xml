@@ -15,6 +15,7 @@
         <module>backend-ms</module>
         <module>frontend-ms</module>
         <module>discovery-is</module>
+        <module>config-is</module>
     </modules>
       
     <properties>

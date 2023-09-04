@@ -30,6 +30,11 @@ http://localhost:9090 : Форма валидации (модуль frontend-ms 
 Для создания окружения и запуска проекта использован docker
 
 
-http://localhost:8761 - Discovery infrastructure service (Eureka) (модуль discovery-is)
- 
+http://localhost:8761 - DiscoveryServer (Eureka) (модуль discovery-is)
+Инфраструктурный сервис регистрации и обнаружения микросервисвов 
 
+http://localhost:8888 - ConfigServer (модуль config-is)
+Инфраструктурный сервис для хранения настроек микросервисов (Файловая система) 
+http://localhost:8888/discovery/default
+http://localhost:8888/backend/default
+http://localhost:8888/frontend/default
