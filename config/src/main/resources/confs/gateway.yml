@@ -1,0 +1,47 @@
+## YAML Template.
+---
+server:
+    port: ${SPRING_LOCAL_GATEWAY_PORT:8080}
+
+logging:
+  level:
+    reactor:
+      netty: INFO
+    org:
+      springframework:
+        cloud:
+          gateway: TRACE
+
+spring:
+    application:
+      name: gateway
+    devtools:
+    livereload:
+      enabled: true 
+    restart:
+      enabled: true
+      additional-paths: /src/main
+    cloud:
+        gateway:
+          httpclient:
+            wiretap: true
+          httpserver:
+            wiretap: true
+          discovery:
+            locator: 
+              enabled: true
+          routes:
+            - id: backend
+              uri: lb://API
+              predicates:
+              - Path=/api/**
+            - id: frontend
+              uri: lb://UI
+              predicates:
+              - Path=/ui/**
+ 
+              
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${DISCOVERY_SERVER_HOST:localhost}:${SPRING_LOCAL_DISCOVERY_PORT:8761}/eureka              

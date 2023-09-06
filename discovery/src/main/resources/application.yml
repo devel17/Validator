@@ -1,0 +1,6 @@
+spring:
+    cloud:
+        config:
+            name: discovery
+    config:
+        import: configserver:http://${CONFIG_SERVER_HOST:localhost}:${SPRING_LOCAL_CONFIG_PORT:8888}

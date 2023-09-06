@@ -1,12 +1,8 @@
+HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-
-/backend/target/
-/backend/nb-configuration.xml
-/frontend/target/
-/frontend/node_modules/
 
 ### STS ###
 .apt_generated
@@ -35,8 +31,3 @@ build/
 
 ### VS Code ###
 .vscode/
-/nbactions.xml
-/nb-configuration.xml
-/nbproject/
-/frontend-ms/node_modules/
-/ui/node_modules/

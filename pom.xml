@@ -12,10 +12,11 @@
     <packaging>pom</packaging>
       
     <modules>
-        <module>backend-ms</module>
-        <module>frontend-ms</module>
-        <module>discovery-is</module>
-        <module>config-is</module>
+        <module>api</module>
+        <module>ui</module>
+        <module>discovery</module>
+        <module>config</module>
+        <module>gateway</module>
     </modules>
       
     <properties>

@@ -1,0 +1,25 @@
+#Discovery First Lookup (legacy bootstrap way: bootstrap.yml , spring-cloud-starter-bootstrap dependency)
+spring:
+  application:
+    name: ui
+  cloud:
+    config:
+      fail-fast: true
+      discovery:
+        enabled: true
+        service-id: config
+eureka:
+    client:
+        service-url:
+            defaultZone: http://${DISCOVERY_SERVER_HOST:localhost}:${SPRING_LOCAL_DISCOVERY_PORT:8761}/eureka/
+
+# application.yml throw WARN java.lang.IllegalStateException: No instances found of configserver (config)
+#spring:
+#    cloud:
+#        config:
+#            name: ui
+#            discovery: 
+#              enabled: true
+#              service-id: config
+#    config:
+#        import: optional:configserver:http://${CONFIG_SERVER_HOST:localhost}:8888

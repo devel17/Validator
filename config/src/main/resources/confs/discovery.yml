@@ -1,0 +1,17 @@
+spring:
+    application:
+        name: discovery
+            
+server:
+    port: ${SPRING_LOCAL_DISCOVERY_PORT:8761}
+    
+eureka:
+    instance:
+        prefer-ip-address: false
+    client:
+        registerWithEureka: false
+        fetchRegistry: false
+        serviceUrl:
+            defaultZone: http://${DISCOVERY_SERVER_HOST:localhost}:${SPRING_LOCAL_DISCOVERY_PORT:8761}/eureka/
+        server:
+            waitTimeInMsWhenSyncEmpty: 0
